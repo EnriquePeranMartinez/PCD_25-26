@@ -3,7 +3,7 @@ package guion3;
 public class BufferMonitor { 
 	 
     public static void main(String[] args) { 
- 
+    	// me como un moco
         MonitorBuffer buffer = new MonitorBuffer(10); 
  
         Productor p1 = new Productor(buffer); 

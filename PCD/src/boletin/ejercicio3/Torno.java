@@ -15,7 +15,7 @@ public class Torno {
 			e.printStackTrace();
 		} 
 		
-		
+			
 	}
 	
 	public boolean hayColaLibre() {

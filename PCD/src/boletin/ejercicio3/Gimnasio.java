@@ -1,16 +1,15 @@
 package boletin.ejercicio3;
 
-import java.util.Random;
 
 public class Gimnasio {
 	
-	private static Torno[] tornos;
+	public static Torno[] tornos;
 	private static Zona[] zonas;
 	private static Cliente[] clientes;
 	
 	
 	public void inicializar() {
-		zonas[0] = new ZonaCardio();
+		//zonas[0] = new ZonaCardio(tornos);
 		
 		for(int i = 1; i < 4; i++) {
 			if(i < 4) tornos[i] = new Torno();
@@ -23,7 +22,7 @@ public class Gimnasio {
 		
 
 		for(int i = 0; i < 50; i++){
-			clientes[i] = new Cliente(tornos);
+			clientes[i] = new Cliente(tornos, zonas);
 		}
 		
 		for(int i = 0; i < 50; i++){
