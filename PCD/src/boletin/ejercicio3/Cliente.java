@@ -4,7 +4,8 @@ import java.util.Random;
 
 public class Cliente extends Thread {
 	private final int tiempo;
-	private boolean pasadoTorno;		// Variable booleana que sirve para distinguir si un cliente ha pasado o no por un torno.
+	private boolean pasadoTorno = false;		// Variable booleana que sirve para distinguir si un cliente ha pasado o no por un torno.
+	private boolean pasadoZona = false;		// Variable para ver si ha pasado por una zona
 	private Torno[] tornos;
 	private Zona[] zonas;
 	
@@ -17,7 +18,7 @@ public class Cliente extends Thread {
 	
 	private int generarTiempo() {
 		Random random = new Random();
-		int aleatorio = random.nextInt();
+		int aleatorio = random.nextInt(5); 
 		return aleatorio;
 	}
 	
@@ -25,10 +26,23 @@ public class Cliente extends Thread {
 		return tiempo;
 	}
 	
-	public void setPasadoTorno(boolean b) {
+	/*public void setPasadoTorno(boolean b) {
 		this.pasadoTorno = b;
-	}
+	}*/
 
+	private int comprobarTornoMenorTiempo(){
+		int menorTiempo = Integer.MAX_VALUE;
+		int torno = -1;
+		int tiempo;
+		for(int i = 0; i < tornos.length;i++) {
+			tiempo = tornos[i].getTiempoEspera();
+			if(tiempo < menorTiempo) {
+				menorTiempo = tiempo;
+				torno = i;
+			}
+		}
+		return torno;
+	}
 	
 	private int comprobarZonaMenorTiempo() {
 		int menorTiempo = Integer.MAX_VALUE;
@@ -46,21 +60,39 @@ public class Cliente extends Thread {
 
 
 	public void run() {
-		// parte 1 
-		// entrar en el torno
+		// PARTE 1: TORNOS
+		// Ver si hay algún torno libre y meterse
+		for (Torno torno : tornos) {
+			if(torno.estaLibre()) {
+				torno.pasar(this);
+				pasadoTorno = true;
+				break;
+			}
+		}
 		
+		// Si no había libres, ver cúal tiene el menor tiempo de espera
+		if (!pasadoTorno) {
+			int mejorTorno = comprobarTornoMenorTiempo();
+			tornos[mejorTorno].pasar(this);
+		}
 		
+		// PARTE 2: ZONAS/MÁQUINAS
+		// Ver cuántas hay libres y elegir una aleatoriamente
+		//if(pasadoTorno){
+			for (Zona zona : zonas) {
+			if (zona.hayMaquinaLibre()) {
+				zona.entrar(this);
+				pasadoZona = true;
+				}
+			}
+		//}
+
 		
-		
-		
-		// parte 2
-		
-		// comprobar tiempo de espera de la zona
-		
-		// entrar a la zona de menos tiempo
-		
-		
+		// Si no ha pasado por una zona, vemos cuál es la que tiene 
+		// el menor tiempo de espera para ponernos en cola 
+		if (!pasadoZona) {
+			int mejorZona = comprobarZonaMenorTiempo();
+			zonas[mejorZona].entrar(this);
+		}
 	}
-	
-	
 }

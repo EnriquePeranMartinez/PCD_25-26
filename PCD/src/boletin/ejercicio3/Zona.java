@@ -7,13 +7,14 @@ public class Zona {
 	// segundo monitor
 	// para
 	// primer monitor
-	private ReentrantLock cerrojo = new ReentrantLock();
-	private final static int NUMERO_CLIENTES = 50;
-	private Condition[] condiciones;
+	//private ReentrantLock cerrojo = new ReentrantLock();
+	//private final static int NUMERO_CLIENTES = 50;
+	//private Condition[] condiciones;
 	private int maquinas;
 	private ArrayList<Cliente> clientesUsandoMaquinas;
 	private ArrayList<Cliente> clientesCola;
 	
+	public Zona(){maquinas = 5;}
 	
 	public Zona(ReentrantLock cerrojo, Condition[] condiciones) {
 		for(int i = 0; i < 4; i++)
@@ -22,12 +23,12 @@ public class Zona {
 	}
 	
 	
-	private boolean verMaquinaLibre() {
+	public synchronized boolean hayMaquinaLibre() {
 		// ver en una zona si hay máquinas libres;
 		return maquinas != 0;
 	}
 	
-	public int obtenerTiempoRestanteZona(){
+	public synchronized int obtenerTiempoRestanteZona(){
 		return clientesCola.stream()
 				.mapToInt(c -> c.getTiempo())
 				.sum() 
@@ -37,15 +38,13 @@ public class Zona {
 				.sum();
 	}
 	
-	
-	
 	public synchronized void entrar(Cliente c) {
 		// Elegir máquina random de entre las 5
 		// Poner como ocupada esa máquina en el array
 		// Dormir el hilo Y milisegundos
 		
 		// LOS CLIENTES SOLO PREGUNTAN SI HAY SITIO
-		if(verMaquinaLibre()) {
+		if(hayMaquinaLibre()) {
 			maquinas--;
 		}
 		

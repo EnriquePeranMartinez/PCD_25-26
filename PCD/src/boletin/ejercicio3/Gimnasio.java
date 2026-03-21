@@ -1,32 +1,40 @@
 package boletin.ejercicio3;
 
-
 public class Gimnasio {
+	
+	private static final int NUMERO_CLIENTES = 2;
 	
 	public static Torno[] tornos;
 	private static Zona[] zonas;
 	private static Cliente[] clientes;
 	
 	
-	public void inicializar() {
-		//zonas[0] = new ZonaCardio(tornos);
+	public static void inicializar() {
 		
-		for(int i = 1; i < 4; i++) {
-			if(i < 4) tornos[i] = new Torno();
-			//zonas[i] = new Zona();
+		tornos = new Torno[3];
+	    zonas = new Zona[4];
+	    clientes = new Cliente[NUMERO_CLIENTES];
+		
+		for (int i = 0; i < 3; i++) {
+			tornos[i] = new Torno();
+		}
+		
+		for(int i = 0; i < 4; i++) {	
+			zonas[i] = new Zona();
+		}
+		
+		for(int i = 0; i < NUMERO_CLIENTES; i++){
+			clientes[i] = new Cliente(tornos, zonas);
 		}
 	}
 
 	
 	public static void main(String[] args) {
 		
-
-		for(int i = 0; i < 50; i++){
-			clientes[i] = new Cliente(tornos, zonas);
-		}
-		
-		for(int i = 0; i < 50; i++){
+		inicializar();
+		for(int i = 0; i < NUMERO_CLIENTES; i++){
 			clientes[i].start();
 		}
+	
 	}
 }
