@@ -7,9 +7,11 @@ public class Torno {
 	// primer monitor
 	private List<Cliente> clientesCola;
 	private Cliente clienteEnElTorno;
+	private final int identificador;
 	
 	
-	public Torno() {
+	public Torno(int _id) {
+		identificador = _id;
 		clientesCola = new ArrayList<Cliente>();
 		clienteEnElTorno = null;
 	}
@@ -23,6 +25,11 @@ public class Torno {
 	}
 	
 	
+	public int getIdentificador() {
+		return identificador;
+	}
+
+
 	public synchronized void pasar(Cliente cliente) {
 		// Cuando el cliente pasa por el torno
 		clientesCola.add(cliente);
