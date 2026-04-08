@@ -2,7 +2,7 @@ package boletin.ejercicio3;
 
 public class Gimnasio {
 	
-	private static final int NUMERO_CLIENTES = 50;
+	private static final int NUMERO_CLIENTES = 20;
 	
 	public static Torno[] tornos;
 	private static Zona[] zonas;

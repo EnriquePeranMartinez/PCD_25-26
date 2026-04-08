@@ -48,20 +48,7 @@ public class Cliente extends Thread {
 		return this.identificador;
 	}
 
-	private int comprobarTornoMenorTiempo(){
-		int menorTiempo = Integer.MAX_VALUE;
-		int torno = -1;
-		int tiempo;
-		for(int i = 0; i < tornos.length;i++) {
-			tiempo = tornos[i].getTiempoEspera();
-			if(tiempo < menorTiempo) {
-				menorTiempo = tiempo;
-				torno = i;
-			}
-		}
-		return torno;
-	}
-	
+
 	private int comprobarZonaMenorTiempo() {
 		int menorTiempo = Integer.MAX_VALUE;
 		int zona = -1;
@@ -94,23 +81,31 @@ public class Cliente extends Thread {
 
 	public void run() {
 		// PARTE 1: TORNOS
+		boolean haEntrado = false;
 		// Ver si hay algún torno libre y meterse
 		for (Torno torno : tornos) {
-			if(torno.estaLibre()) {
+			if(torno.intentarEntrar()) {
 				System.out.println("DEBUG: TORNO ELECTO: " + torno);
-				torno.pasar(this);
 				pasadoTorno = torno;
+				haEntrado = true;
 				//System.out.println("Soy "+ identificador + " he entrado en el torno :)");
 				break;
 			}
 		}
 		
-		// Si no había libres, ver cúal tiene el menor tiempo de espera
-		if (pasadoTorno == null) {
-			int mejorTorno = comprobarTornoMenorTiempo();
-			tornos[mejorTorno].pasar(this);
-			pasadoTorno = tornos[mejorTorno];
+		// Si no había libres, meterse en uno random y hacer cola
+		if (!haEntrado) {
+			int tornoRandom = new Random().nextInt(tornos.length);
+			pasadoTorno = tornos[tornoRandom]; // Aquí entiendo que da igual si cae en el mismo, es aleatorio
+			try {
+				pasadoTorno.hacerCola(); // Se pone a la cola del torno que le ha tocado
+			} catch (InterruptedException e) {e.printStackTrace();}
 		}
+		try {
+			Thread.sleep(tiempo);
+		
+		} catch (InterruptedException e) {e.printStackTrace();}
+		
 		
 		// PARTE 2: ZONAS/MÁQUINAS
 		// Ver cuántas hay libres y elegir una aleatoriamente

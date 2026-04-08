@@ -1,56 +1,51 @@
 package boletin.ejercicio3;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class Torno {
 	// primer monitor
-	private List<Cliente> clientesCola;
-	private Cliente clienteEnElTorno;
+	private boolean ocupado = false;
 	private final int identificador;
+	
+	
 	
 	
 	public Torno(int _id) {
 		identificador = _id;
-		clientesCola = new ArrayList<Cliente>();
-		clienteEnElTorno = null;
 	}
 
-	public synchronized int getTiempoEspera() {
-		return clientesCola.stream()
-				.mapToInt(c -> c.getTiempo())
-				.sum() 
-				+ 
-				clienteEnElTorno.getTiempo();
-	}
-	
 	
 	public int getIdentificador() {
 		return identificador;
 	}
 
-
-	public synchronized void pasar(Cliente cliente) {
-		// Cuando el cliente pasa por el torno
-		clientesCola.add(cliente);
-		
-		try {
-			clienteEnElTorno = cliente;
-			Thread.sleep(cliente.getTiempo());
-			//cliente.setPasadoTorno(true);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} finally {
-			// Al salir del torno, se debe liberar el puntero del atributo 
-			clienteEnElTorno = null; 
+	
+	// Si no está ocupado le dejamos entrar y lo ocupamos
+	public synchronized boolean intentarEntrar() {
+		if (!ocupado) {
+			ocupado = true;
+			return true;
 		}
-		
-			
+		return false;
 	}
 	
-	public synchronized boolean estaLibre() {
-		// Si no hay ningún cliente en el torno, se devolverá nulo
-		return clienteEnElTorno == null;
+	
+	public synchronized void hacerCola() throws InterruptedException {
+		while (ocupado) {
+			wait();	 // Nos esperamos hasta que esté libre
+		}
+		ocupado = true;
+	}
+	
+	public synchronized void salir() {
+		ocupado = false; // Desocupamos el torno
+		notify(); // Le decimos que pase el siguiente
+	}
+	
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return super.toString();
 	}
 	
 	
