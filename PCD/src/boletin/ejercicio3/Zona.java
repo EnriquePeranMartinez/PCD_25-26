@@ -18,7 +18,7 @@ public class Zona {
 	
 
 	public Zona(int identificador) {
-		maquinas = 5;
+		maquinas = 2;
 		id = identificador;
 		clientesCola = new ArrayList<Cliente>();
 		clientesUsandoMaquinas = new ArrayList<Cliente>();
@@ -29,9 +29,9 @@ public class Zona {
 	}
 	
 	
-	public synchronized boolean hayMaquinaLibre() {
-		// ver en una zona si hay máquinas libres;
-		return maquinas != 0;
+	public synchronized boolean estaOcupada() {
+		// ver si la zona está completamente ocupada
+		return maquinas == 0;
 	}
 	
 	public int obtenerTiempoRestanteZona(){

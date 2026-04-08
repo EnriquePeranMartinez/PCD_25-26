@@ -2,7 +2,9 @@ package boletin.ejercicio3;
 
 public class Gimnasio {
 	
-	private static final int NUMERO_CLIENTES = 20;
+	public static final int NUMERO_CLIENTES = 3;
+	public static final int NUMERO_TORNOS = 4;
+	public static final int NUMERO_ZONAS = 3;
 	
 	public static Torno[] tornos;
 	private static Zona[] zonas;
@@ -11,8 +13,8 @@ public class Gimnasio {
 	
 	public static void inicializar() {
 		
-		tornos = new Torno[3];
-	    zonas = new Zona[4];
+		tornos = new Torno[NUMERO_TORNOS];
+	    zonas = new Zona[NUMERO_ZONAS];
 	    clientes = new Cliente[NUMERO_CLIENTES];
 		
 		for (int i = 0; i < 3; i++) {
@@ -27,8 +29,6 @@ public class Gimnasio {
 			clientes[i] = new Cliente(tornos, zonas, "c"+i);
 		}
 	}
-
-	
 
 
 	public static void main(String[] args) {
