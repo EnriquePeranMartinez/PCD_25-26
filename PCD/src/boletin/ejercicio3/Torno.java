@@ -7,8 +7,6 @@ public class Torno {
 	private final int identificador;
 	
 	
-	
-	
 	public Torno(int _id) {
 		identificador = _id;
 	}

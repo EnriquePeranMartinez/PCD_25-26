@@ -23,13 +23,12 @@ public class Cliente extends Thread {
 	
 	private int generarTiempo() {
 		Random random = new Random();
-		int aleatorio = random.nextInt(5);
-		if(aleatorio == 0) aleatorio++;
+		int aleatorio = random.nextInt(4) + 1; // Entre 1 y 5
 		return aleatorio;
 	}
 	
 	public int getTiempo() {
-		return tiempo;
+		return 1;
 	}
 	
 	
@@ -73,7 +72,7 @@ public class Cliente extends Thread {
 							+ "Estimación de espera (sin incluirse a sí mismo): \n"
 							+ "  Zona1(Cardio)= " + zonas[0].obtenerTiempoRestanteZona() + ",\n" 
 							+ "  Zona2(fuerza)= " + zonas[1].obtenerTiempoRestanteZona() + ",\n" 
-							+ "  Zona3(Funcional)=" + zonas[2].obtenerTiempoRestanteZona()+ ",\n"
+							+ "  Zona3(Funcional)= " + zonas[2].obtenerTiempoRestanteZona()+ ",\n"
 							+ "  Zona4(estiramientos)= " + zonas[3].obtenerTiempoRestanteZona()+ "\n"
 							+ "Espera en bicicleta premium(si aplica):\n"
 							+ "--------------------------------------------------------------\n");
@@ -86,7 +85,7 @@ public class Cliente extends Thread {
 		// Ver si hay algún torno libre y meterse
 		for (Torno torno : tornos) {
 			if(torno.intentarEntrar()) {
-				System.out.println("DEBUG: CLIENTE " + this.identificador + " TORNO ELECTO: " + torno.getIdentificador());
+				//System.out.println("DEBUG: CLIENTE " + this.identificador + " TORNO ELECTO: " + torno.getIdentificador());
 				pasadoTorno = torno;
 				haEntrado = true;
 				//System.out.println("Soy "+ identificador + " he entrado en el torno :)");
@@ -109,7 +108,8 @@ public class Cliente extends Thread {
 			pasadoTorno.salir(); // Cuando terminemos de usarlo, salimos del torno
 		}
 		
-		
+		//System.out.println("DEBUG: CLIENTE " + this.identificador + " TORNO ELECTO: " + this.pasadoTorno.getIdentificador());
+
 		
 		// PARTE 2: ZONAS/MÁQUINAS
 		
@@ -125,7 +125,7 @@ public class Cliente extends Thread {
 			
 		}
 		
-		// 3 CASOS
+		// 3 CASOS del estado de las 4 zonas
 		
 		// CASO 1: Todas las zonas ocupadas
 		
@@ -133,7 +133,7 @@ public class Cliente extends Thread {
 			int mejorZona = comprobarZonaMenorTiempo();
 			
 			try {
-				System.out.println("DEBUG (CASO 2): ZONA ELECTA: " + zonas[mejorZona].getIdentificador());
+				System.out.println("DEBUG (CASO 1): ZONA ELECTA: " + zonas[mejorZona].getIdentificador());
 				zonas[mejorZona].entrar(this);
 				Thread.sleep(tiempo);
 				zonas[mejorZona].salir(this);
@@ -166,6 +166,7 @@ public class Cliente extends Thread {
 				Thread.sleep(tiempo);
 				zonasLibres.get(zonaLibRandom).salir(this);
 			} catch (InterruptedException e) {e.printStackTrace();}
+			pasadoZona = zonas[zonaLibRandom];
 
 		}
 		
