@@ -17,9 +17,9 @@ public class Zona {
 	private ArrayList<Cliente> clientesCola;
 	
 
-	public Zona(int identificador) {
+	public Zona() {
 		maquinas = 2;
-		id = identificador;
+		id = 0;
 		clientesCola = new ArrayList<Cliente>();
 		clientesUsandoMaquinas = new ArrayList<Cliente>();
 	}

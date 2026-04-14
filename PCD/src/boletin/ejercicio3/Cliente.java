@@ -8,14 +8,14 @@ public class Cliente extends Thread {
 	private Torno pasadoTorno;		// Variable booleana que sirve para distinguir si un cliente ha pasado o no por un torno.
 	private Zona pasadoZona;	// Variable para ver si ha pasado por una zona
 	private final String identificador;
-	private Torno[] tornos;
-	private Zona[] zonas;
+	private Torno torno;
+	private Zona zona;
 	
-	public Cliente(Torno[] t, Zona[] z, String _id) {
+	public Cliente(Torno t, Zona z, String _id) {
 		super();
 		this.tiempo = generarTiempo();
-		tornos = t;
-		zonas = z;
+		torno = t;
+		zona = z;
 		identificador = _id;
 		pasadoTorno = null;
 		pasadoZona = null;

@@ -1,14 +1,20 @@
 package boletin.ejercicio3;
 
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Torno {
 	// primer monitor
 	private boolean ocupado = false;
 	private final int identificador;
 	
+	private ReentrantLock l = new ReentrantLock();
+	private Condition torno1 = l.newCondition();
+	private Condition torno2 = l.newCondition();
+	private Condition torno3 = l.newCondition();
 	
-	public Torno(int _id) {
-		identificador = _id;
+	public Torno() {
+		identificador = 0;
 	}
 
 	
@@ -18,12 +24,13 @@ public class Torno {
 
 	
 	// Si no está ocupado le dejamos entrar y lo ocupamos
-	public synchronized boolean intentarEntrar() {
-		if (!ocupado) {
-			ocupado = true;
-			return true;
+	public void intentarEntrar() throws InterruptedException{
+		l.lock();
+		try {
+			
+		} finally {
+			l.unlock();
 		}
-		return false;
 	}
 	
 	
@@ -37,13 +44,6 @@ public class Torno {
 	public synchronized void salir() {
 		ocupado = false; // Desocupamos el torno
 		notify(); // Le decimos que pase el siguiente
-	}
-	
-	
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
 	}
 	
 	
