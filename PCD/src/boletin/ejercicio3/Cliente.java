@@ -48,7 +48,7 @@ public class Cliente extends Thread {
 		return this.identificador;
 	}
 
-
+/*
 	private int comprobarZonaMenorTiempo() {
 		int menorTiempo = Integer.MAX_VALUE;
 		int zona = -1;
@@ -77,9 +77,12 @@ public class Cliente extends Thread {
 							+ "Espera en bicicleta premium(si aplica):\n"
 							+ "--------------------------------------------------------------\n");
 	}
-	
+*/	
 
 	public void run() {
+		/*
+		
+		
 		// PARTE 1: TORNOS
 		boolean haEntrado = false;
 		// Ver si hay algún torno libre y meterse
@@ -172,4 +175,6 @@ public class Cliente extends Thread {
 		
 		imprimirResult();
 	}
+	
+	*/
 }

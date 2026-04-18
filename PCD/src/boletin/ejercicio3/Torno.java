@@ -1,11 +1,12 @@
 package boletin.ejercicio3;
 
+import java.util.Iterator;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Torno {
 	// primer monitor
-	private boolean ocupado = false;
+	private boolean ocupado[];
 	private final int identificador;
 	
 	private ReentrantLock l = new ReentrantLock();
@@ -15,9 +16,12 @@ public class Torno {
 	
 	public Torno() {
 		identificador = 0;
+		for (int i = 0; i < ocupado.length; i++) {
+			ocupado[i] = false;
+		}
 	}
 
-	
+
 	public int getIdentificador() {
 		return identificador;
 	}
@@ -27,6 +31,18 @@ public class Torno {
 	public void intentarEntrar() throws InterruptedException{
 		l.lock();
 		try {
+			if (!l.hasWaiters(torno1)) {	// Mira si hay sitio en el primero
+				
+			} 
+			else if (!l.hasWaiters(torno2)){ // Mira si hay sitio en el segundo
+				
+			}
+			else if (!l.hasWaiters(torno3)) { // Mira si hay sitio en el tercero
+				 
+			}
+			else {						    // Si no hay sitio, uno random
+				
+			}
 			
 		} finally {
 			l.unlock();

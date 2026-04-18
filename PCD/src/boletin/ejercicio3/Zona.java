@@ -1,31 +1,36 @@
 package boletin.ejercicio3;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.locks.*;
 
 public class Zona {
-	// segundo monitor
-	// para
-	// primer monitor
-	//private ReentrantLock cerrojo = new ReentrantLock(true);
-	//private final Condition condicionSalida = cerrojo.newCondition();
-	//private final Condition colaEspera = cerrojo.newCondition();
+	
+	
+
 	private int clientesParaSalir = 0;
 	private int maquinas;
-	private final int id;
+	private final int[] maquinasPorZona = {5, 5, 5, 5};
+	private Random random = new Random();
+	
+	private ReentrantLock monitorZona = new ReentrantLock(true);
+	private final Condition zona1 = monitorZona.newCondition();
+	private final Condition zona2 = monitorZona.newCondition();
+	private final Condition zona3 = monitorZona.newCondition();
+	private final Condition zona4 = monitorZona.newCondition();
+	
 	private ArrayList<Cliente> clientesUsandoMaquinas;
 	private ArrayList<Cliente> clientesCola;
 	
 
 	public Zona() {
 		maquinas = 2;
-		id = 0;
 		clientesCola = new ArrayList<Cliente>();
 		clientesUsandoMaquinas = new ArrayList<Cliente>();
 	}
 	
 	public int getIdentificador(){
-		return id;
+		return 0;
 	}
 	
 	
