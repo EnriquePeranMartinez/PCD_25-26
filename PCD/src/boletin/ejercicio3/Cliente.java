@@ -10,6 +10,7 @@ public class Cliente extends Thread {
 	private final String identificador;
 	private Torno torno;
 	private Zona zona;
+	private int zonaEscogida;
 	
 	public Cliente(Torno t, Zona z, String _id) {
 		super();
@@ -47,7 +48,13 @@ public class Cliente extends Thread {
 	public String getIdentificador() {
 		return this.identificador;
 	}
-
+	public int getZonaEscogida() {
+		return zonaEscogida;
+	}
+	
+	public void setZonaEscogida(int _zona) {
+		zonaEscogida = _zona;
+	}
 /*
 	private int comprobarZonaMenorTiempo() {
 		int menorTiempo = Integer.MAX_VALUE;

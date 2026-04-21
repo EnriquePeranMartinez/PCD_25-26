@@ -11,34 +11,34 @@ public class Zona {
 	private int clientesParaSalir = 0;
 	private int maquinas;
 	private final int[] maquinasPorZona = {5, 5, 5, 5};
-	private Random random = new Random();
+	private final int[] tiempoPorZona = {0, 0, 0, 0};
 	
 	private ReentrantLock monitorZona = new ReentrantLock(true);
-	private final Condition zona1 = monitorZona.newCondition();
-	private final Condition zona2 = monitorZona.newCondition();
-	private final Condition zona3 = monitorZona.newCondition();
-	private final Condition zona4 = monitorZona.newCondition();
+	private Condition[] zonas;
 	
-	private ArrayList<Cliente> clientesUsandoMaquinas;
-	private ArrayList<Cliente> clientesCola;
+
 	
 
 	public Zona() {
-		maquinas = 2;
-		clientesCola = new ArrayList<Cliente>();
-		clientesUsandoMaquinas = new ArrayList<Cliente>();
-	}
+		maquinas = 5;
+
+		for(int i = 0; i < 4; i ++) {
+			zonas[i] = monitorZona.newCondition();
+		}
+	}	
 	
 	public int getIdentificador(){
 		return 0;
 	}
 	
 	
-	public synchronized boolean estaOcupada() {
+	private synchronized boolean isZonaOcuapada(int zona) {
 		// ver si la zona está completamente ocupada
-		return maquinas == 0;
+		return maquinasPorZona[zona] == 0;
 	}
 	
+	
+	/*
 	public int obtenerTiempoRestanteZona(){
 		return clientesCola.stream()
 				.mapToInt(c -> c.getTiempo())
@@ -48,26 +48,74 @@ public class Zona {
 				.mapToInt(c -> c.getTiempo())
 				.sum();	
 	}
+	*/
 	
-	public synchronized void entrar(Cliente c) throws InterruptedException {
+	private int obtenerZonaMenorTiempo() {
+		int menorTiempo = Integer.MAX_VALUE;
+		int zona = -1;
+		for(int i = 0; i < tiempoPorZona.length; i++) {
+			
+			if(menorTiempo > tiempoPorZona[i]) {
+				menorTiempo = tiempoPorZona[i]; // en caso de igualdad, se toma aquella que primero se descubrió
+				zona = i;
+			}
+		}
+		return zona;
+	}
+	
+	
+	
+	
+	private int eleccionZona() {
+		// dos casos
+		// CASO 0: TODAS LIBRES
+		// CASO 1: HAY ZONAS OCUPADAS
+		
+		int caso = 0;
+		for(int t = 0; t < tiempoPorZona.length; t++) {
+			if(tiempoPorZona[t] != 0) {
+				caso = 1;
+			}
+		}
+		
+		int zonaEscogida = switch (caso) {
+		case 0 -> new Random().nextInt() % 4; // se elige de forma aleatoria
+		case 1 -> obtenerZonaMenorTiempo(); 
+		
+		default -> 
+			throw new IllegalArgumentException("Unexpected value: " + caso);
+		}; 
+		
+		return zonaEscogida;
+	}
+	
+	
+	
+	
+	
+	public void entrar(Cliente c) throws InterruptedException {
 		// Elegir máquina random de entre las 5
 		// Poner como ocupada esa máquina en el array
 		// Dormir el hilo Y milisegundos
-		//cerrojo.lock();
+		monitorZona.lock();
 		try {
-			clientesCola.add(c);
 			
-			// espera ocupada
-			while (estaOcupada()){
-				wait();
+			int zonaElegida = eleccionZona();
+			tiempoPorZona[zonaElegida] += c.getTiempo(); // se suma el tiempo del cliente que quiere entrar y se mete en la zona del condition
+			// espera ocupada en la zona
+			while (isZonaOcuapada(zonaElegida)){
+				zonas[zonaElegida].await();;
 			}
-			clientesCola.remove(c);
-		    clientesUsandoMaquinas.add(c);
-		    maquinas--;
+			
+			
+			maquinasPorZona[zonaElegida]--;
+			
+			// el proceso se queda dormido
+			c.setZonaEscogida(zonaElegida);		
 		} 	finally {
-			//cerrojo.unlock();
+			monitorZona.unlock();
 		}
-		// Entrar en la cola para ver el tiempo de espera
+		
 
 	}
 	
@@ -76,23 +124,21 @@ public class Zona {
 	 * Luego, los que estaban esperando hacen la entrada.
 	 * */
 	 
-	 public synchronized void salir(Cliente c)throws InterruptedException {
-		 //cerrojo.lock();
+	 public void salir(Cliente c)throws InterruptedException {
+		 monitorZona.lock();
 		 try {
-			 maquinas++;
-			 if(!clientesCola.isEmpty()) { // Aquí iba el cerrojo antes con hasWaiters(colaEspera)
+			 if(monitorZona.hasWaiters(zonas[c.getZonaEscogida()])) { 
+				 // Aquí iba el cerrojo antes con hasWaiters(colaEspera) !clientesCola.isEmpty()
 				 //colaEspera.signal();
-				 notify();
 				 
-				 //clientesParaSalir++;
-				 //condicionSalida.await();
-				 //clientesParaSalir--;
-				 clientesCola.remove(c);
+				 zonas[c.getZonaEscogida()].signal();
+				 maquinasPorZona[c.getZonaEscogida()]++;
+	
 			 }
 			 //if(clientesParaSalir > 0) //condicionSalida.signal();
 			 
 		 } finally {
-			 //cerrojo.unlock();
+			 monitorZona.unlock();
 		 }
 	 }
 }
