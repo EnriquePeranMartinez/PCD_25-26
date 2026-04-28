@@ -5,20 +5,19 @@ import java.util.Random;
 
 public class Cliente extends Thread {
 	private final int tiempo;
-	private Torno pasadoTorno;		// Variable booleana que sirve para distinguir si un cliente ha pasado o no por un torno.
+	private Torno pasadoTorno;		
 	private Zona pasadoZona;	// Variable para ver si ha pasado por una zona
 	private final String identificador;
-	private Torno torno;
+	private int indiceTorno;
 	private Zona zona;
 	private int zonaEscogida;
 	
-	public Cliente(Torno t, Zona z, String _id) {
+	public Cliente(Zona z, String _id, Torno _pasadoTorno) {
 		super();
 		this.tiempo = generarTiempo();
-		torno = t;
 		zona = z;
 		identificador = _id;
-		pasadoTorno = null;
+		pasadoTorno = _pasadoTorno;
 		pasadoZona = null;
 	}
 	
@@ -55,6 +54,8 @@ public class Cliente extends Thread {
 	public void setZonaEscogida(int _zona) {
 		zonaEscogida = _zona;
 	}
+	public int getIndiceTorno() {return indiceTorno;}
+	public void setIndiceTorno(int _torno) {indiceTorno = _torno;}
 /*
 	private int comprobarZonaMenorTiempo() {
 		int menorTiempo = Integer.MAX_VALUE;
@@ -87,6 +88,26 @@ public class Cliente extends Thread {
 */	
 
 	public void run() {
+		
+		// PARTE 1, PASAR POR EL TORNO
+		
+		pasadoTorno.intentarEntrar(this);
+		wait(tiempo);
+		pasadoTorno.salir(this);
+		
+		// PARTE 2 SALIR POR EL TORNO
+		
+		
+		// PARTE 3 ENTRAR EN LA ZONA
+		zona.entrar(this);
+		wait(tiempo);
+		
+		//PARTE 4 SALIR DE LA ZONA
+		zona.salir(this);
+		//Stalker referencia?
+		
+		
+	}
 		/*
 		
 		
