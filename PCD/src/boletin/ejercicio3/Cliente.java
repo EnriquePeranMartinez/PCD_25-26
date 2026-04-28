@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Cliente extends Thread {
 	private final int tiempo;
-	private Torno pasadoTorno;		
+	private Torno pasadoTorno;		// Variable booleana que sirve para distinguir si un cliente ha pasado o no por un torno.
 	private Zona pasadoZona;	// Variable para ver si ha pasado por una zona
 	private final String identificador;
 	private int indiceTorno;
