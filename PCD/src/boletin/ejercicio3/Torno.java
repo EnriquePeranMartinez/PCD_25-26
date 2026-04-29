@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Torno {
 	// primer monitor
-	private boolean ocupado[];
+	private boolean ocupado[] = {false, false, false};
 	private final int identificador;
 	
 	private ReentrantLock l = new ReentrantLock();
@@ -18,9 +18,6 @@ public class Torno {
 	
 	public Torno() {
 		identificador = 0;
-		for (int i = 0; i < ocupado.length; i++) {
-			ocupado[i] = false;
-		}
 	}
 
 

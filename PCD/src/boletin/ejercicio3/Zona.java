@@ -15,7 +15,7 @@ public class Zona {
 	private final int[] tiempoPorZona = {0, 0, 0, 0};
 	
 	private ReentrantLock monitorZona = new ReentrantLock(true);
-	private Condition[] zonas;
+	private Condition[] zonas = {monitorZona.newCondition(), monitorZona.newCondition(), monitorZona.newCondition(), monitorZona.newCondition()};
 	
 
 	
@@ -23,9 +23,7 @@ public class Zona {
 	public Zona() {
 		maquinas = 5;
 		maquinaBicicleta = new MonitorBicicleta(false);
-		for(int i = 0; i < 4; i ++) {
-			zonas[i] = monitorZona.newCondition();
-		}
+
 	}	
 	
 	public int getIdentificador(){
