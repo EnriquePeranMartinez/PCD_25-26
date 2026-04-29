@@ -61,8 +61,13 @@ public class Torno {
 	}
 	
 	public synchronized void salir(Cliente c) {
-		ocupado[c.getIndiceTorno()] = false; // Desocupamos el torno
-		notify(); // Le decimos que pase el siguiente
+		l.lock();
+		try{
+			ocupado[c.getIndiceTorno()] = false; // Desocupamos el torno
+			notify(); // Le decimos que pase el siguiente
+		} finally{
+			l.unlock;
+		}
 	}
 	
 	
