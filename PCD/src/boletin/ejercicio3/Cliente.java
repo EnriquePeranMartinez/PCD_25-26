@@ -12,7 +12,7 @@ public class Cliente extends Thread {
 	private Zona zona;
 	private int zonaEscogida;
 	
-	public Cliente(Zona z, String _id, Torno _pasadoTorno) {
+	public Cliente(Torno _pasadoTorno, Zona z,  String _id) {
 		super();
 		this.tiempo = generarTiempo();
 		zona = z;
@@ -89,22 +89,26 @@ public class Cliente extends Thread {
 
 	public void run() {
 		
-		// PARTE 1, PASAR POR EL TORNO
 		
-		pasadoTorno.intentarEntrar(this);
-		wait(tiempo);
-		pasadoTorno.salir(this);
-		
-		// PARTE 2 SALIR POR EL TORNO
-		
-		
-		// PARTE 3 ENTRAR EN LA ZONA
-		zona.entrar(this);
-		wait(tiempo);
-		
-		//PARTE 4 SALIR DE LA ZONA
-		zona.salir(this);
-		//Stalker referencia?
+		try {
+			// PARTE 1, PASAR POR EL TORNO
+			pasadoTorno.intentarEntrar(this);
+			wait(tiempo);
+			// PARTE 2 SALIR POR EL TORNO
+			pasadoTorno.salir(this);
+			
+			
+			// PARTE 3 ENTRAR EN LA ZONA
+			zona.entrar(this);
+			wait(tiempo);
+			//PARTE 4 SALIR DE LA ZONA
+			zona.salir(this);
+			//Stalker referencia?
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 	}
