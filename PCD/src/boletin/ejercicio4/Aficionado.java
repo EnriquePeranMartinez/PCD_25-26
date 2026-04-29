@@ -4,7 +4,7 @@ package boletin.ejercicio4;
 import messagepassing.MailBox;
 import messagepassing.CommunicationScheme;
 
-public class Aficionado implements Runnable {
+public class Aficionado extends Thread {
   
 
 
