@@ -66,7 +66,7 @@ public class Torno {
 			ocupado[c.getIndiceTorno()] = false; // Desocupamos el torno
 			notify(); // Le decimos que pase el siguiente
 		} finally{
-			l.unlock;
+			l.unlock();
 		}
 	}
 	

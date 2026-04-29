@@ -11,6 +11,7 @@ public class Cliente extends Thread {
 	private int indiceTorno;
 	private Zona zona;
 	private int zonaEscogida;
+	private boolean usaBicicleta;
 	
 	public Cliente(Torno _pasadoTorno, Zona z,  String _id) {
 		super();
@@ -19,6 +20,7 @@ public class Cliente extends Thread {
 		identificador = _id;
 		pasadoTorno = _pasadoTorno;
 		pasadoZona = null;
+		usaBicicleta = false;
 	}
 	
 	private int generarTiempo() {
@@ -50,7 +52,13 @@ public class Cliente extends Thread {
 	public int getZonaEscogida() {
 		return zonaEscogida;
 	}
+	public boolean getUsaBicicleta() {
+		return this.usaBicicleta;
+	}
 	
+	public void setUsaBicicleta(boolean usada) {
+		this.usaBicicleta = usada;
+	}
 	public void setZonaEscogida(int _zona) {
 		zonaEscogida = _zona;
 	}
@@ -98,10 +106,16 @@ public class Cliente extends Thread {
 			pasadoTorno.salir(this);
 			
 			
-			// PARTE 3 ENTRAR EN LA ZONA
+			// PARTE 3 ENTRAR EN LA ZONA, USAR TAMBIEN BICICLETA SI ES EL CASO
 			zona.entrar(this);
+			if(usaBicicleta) {
+				zona.getMaquinaBicicleta().usarBicicleta(this);
+			}
 			wait(tiempo);
-			//PARTE 4 SALIR DE LA ZONA
+			//PARTE 4 SALIR DE LA ZONA, SALIR TAMBIEN DE LA BICICLETA
+			if(usaBicicleta) {
+				zona.getMaquinaBicicleta().dejarBicicleta(this);
+			}
 			zona.salir(this);
 			//Stalker referencia?
 

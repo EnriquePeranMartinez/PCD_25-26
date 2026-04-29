@@ -10,6 +10,7 @@ public class Zona {
 
 	private int clientesParaSalir = 0;
 	private int maquinas;
+	private MonitorBicicleta maquinaBicicleta;
 	private final int[] maquinasPorZona = {5, 5, 5, 5};
 	private final int[] tiempoPorZona = {0, 0, 0, 0};
 	
@@ -21,7 +22,7 @@ public class Zona {
 
 	public Zona() {
 		maquinas = 5;
-
+		maquinaBicicleta = new MonitorBicicleta(false);
 		for(int i = 0; i < 4; i ++) {
 			zonas[i] = monitorZona.newCondition();
 		}
@@ -30,14 +31,18 @@ public class Zona {
 	public int getIdentificador(){
 		return 0;
 	}
-	
+	public MonitorBicicleta getMaquinaBicicleta() {
+		return this.maquinaBicicleta;
+	}
 	
 	private synchronized boolean isZonaOcuapada(int zona) {
 		// ver si la zona está completamente ocupada
 		return maquinasPorZona[zona] == 0;
 	}
 	
-	
+	private boolean isBicicletaElected() {
+		return new Random().nextInt() % 5 == 0;
+	}
 	/*
 	public int obtenerTiempoRestanteZona(){
 		return clientesCola.stream()
@@ -106,7 +111,9 @@ public class Zona {
 			while (isZonaOcuapada(zonaElegida)){
 				zonas[zonaElegida].await();;
 			}
-			
+			if(zonaElegida == 0 && isBicicletaElected()) {
+				c.setUsaBicicleta(true);;
+			}
 			
 			maquinasPorZona[zonaElegida]--;
 			
