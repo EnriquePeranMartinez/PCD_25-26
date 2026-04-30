@@ -78,7 +78,6 @@ public class Cliente extends Thread {
 		}
 		return zona;
 	}
-	
 	private void imprimirResult() {
 		System.out.println("--------------------------------------------------------------\n" +
 							"Cliente " + getIdentificador() + " ha pasado por el torno " +  getPasadoTorno().getIdentificador() + "\n"
@@ -93,7 +92,9 @@ public class Cliente extends Thread {
 							+ "Espera en bicicleta premium(si aplica):\n"
 							+ "--------------------------------------------------------------\n");
 	}
+
 */	
+
 
 	public void run() {
 		
@@ -101,7 +102,7 @@ public class Cliente extends Thread {
 		try {
 			// PARTE 1, PASAR POR EL TORNO
 			pasadoTorno.intentarEntrar(this);
-			wait(tiempo);
+			Thread.sleep(tiempo);
 			// PARTE 2 SALIR POR EL TORNO
 			pasadoTorno.salir(this);
 			
@@ -111,7 +112,7 @@ public class Cliente extends Thread {
 			if(usaBicicleta) {
 				zona.getMaquinaBicicleta().usarBicicleta(this);
 			}
-			wait(tiempo);
+			Thread.sleep(tiempo);
 			//PARTE 4 SALIR DE LA ZONA, SALIR TAMBIEN DE LA BICICLETA
 			if(usaBicicleta) {
 				zona.getMaquinaBicicleta().dejarBicicleta(this);
