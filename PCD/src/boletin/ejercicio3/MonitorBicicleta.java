@@ -8,10 +8,12 @@ public class MonitorBicicleta {
 	  private ReentrantLock bicicleta = new ReentrantLock();
 	  private Condition colaBicicleta = bicicleta.newCondition();
 	  private boolean isBicicletaOccupied;
+	  private int tiempoEsperaBicicleta;
 	  
 	  
 	  public MonitorBicicleta(boolean ocupado) {
 			this.isBicicletaOccupied = ocupado;
+			tiempoEsperaBicicleta = 0;
 	  }
 	  
 	  
@@ -23,9 +25,14 @@ public class MonitorBicicleta {
 	  public void setBicicletaOccupied(boolean isBicicletaOccupied) {
 		  this.isBicicletaOccupied = isBicicletaOccupied;
 	  }
-	
-	
-	
+	  
+	  public int getTiempoEsperaBicicleta() {
+		return tiempoEsperaBicicleta;
+	}
+
+
+
+
 	  public void usarBicicleta(Cliente c) throws InterruptedException{
 	    bicicleta.lock();
 	    try{
@@ -33,6 +40,7 @@ public class MonitorBicicleta {
 	    		colaBicicleta.await();
 	      }
 	    	isBicicletaOccupied = true;
+	    	tiempoEsperaBicicleta += c.getTiempo();
 	    } finally{
 	    	bicicleta.unlock();
 	    }
@@ -42,7 +50,8 @@ public class MonitorBicicleta {
 	    bicicleta.lock();
 	    try{
 	    	isBicicletaOccupied = false;
-	    	colaBicicleta.notify();
+	    	tiempoEsperaBicicleta -= c.getTiempo();
+	    	colaBicicleta.signal();
 	    } finally{
 	    	bicicleta.unlock();
 	    }

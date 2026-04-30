@@ -2,7 +2,7 @@ package boletin.ejercicio3;
 
 public class Gimnasio {
 	
-	public static final int NUMERO_CLIENTES = 5;
+	public static final int NUMERO_CLIENTES = 50;
 	public static final int NUMERO_TORNOS = 3;
 	public static final int NUMERO_ZONAS = 4;
 	

@@ -1,6 +1,5 @@
 package boletin.ejercicio3;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Cliente extends Thread {
@@ -14,7 +13,6 @@ public class Cliente extends Thread {
 	private boolean usaBicicleta;
 	
 	public Cliente(Torno _pasadoTorno, Zona z,  String _id) {
-		super();
 		this.tiempo = generarTiempo();
 		zona = z;
 		identificador = _id;
@@ -30,7 +28,7 @@ public class Cliente extends Thread {
 	}
 	
 	public int getTiempo() {
-		return 1;
+		return tiempo;
 	}
 	
 	
@@ -64,23 +62,7 @@ public class Cliente extends Thread {
 	}
 	public int getIndiceTorno() {return indiceTorno;}
 	public void setIndiceTorno(int _torno) {indiceTorno = _torno;}
-/*
-	private void imprimirResult() {
-		System.out.println("--------------------------------------------------------------\n" +
-							"Cliente " + getIdentificador() + " ha pasado por el torno " +  getPasadoTorno().getIdentificador() + "\n"
-							+ "Tiempo en el torno: " + getTiempo() + "\n"
-							+ "Zona elegida: " + getPasadoZona().getIdentificador()+ "\n"
-							+ "Tiempo de entrenamiento: " + getTiempo() + "\n"
-							+ "Estimación de espera (sin incluirse a sí mismo): \n"
-							+ "  Zona1(Cardio)= " + zonas[0].obtenerTiempoRestanteZona() + ",\n" 
-							+ "  Zona2(fuerza)= " + zonas[1].obtenerTiempoRestanteZona() + ",\n" 
-							+ "  Zona3(Funcional)= " + zonas[2].obtenerTiempoRestanteZona()+ ",\n"
-							+ "  Zona4(estiramientos)= " + zonas[3].obtenerTiempoRestanteZona()+ "\n"
-							+ "Espera en bicicleta premium(si aplica):\n"
-							+ "--------------------------------------------------------------\n");
-	}
 
-*/	
 
 
 	public void run() {
@@ -114,9 +96,5 @@ public class Cliente extends Thread {
 		
 		
 	}
-		/*
-		
 
-	
-	*/
 }

@@ -1,6 +1,5 @@
 package boletin.ejercicio3;
 
-import java.util.Iterator;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.Random;
@@ -9,42 +8,45 @@ import java.util.Random;
 public class Torno {
 	// primer monitor
 	private boolean ocupado[] = {false, false, false};
-	private final int identificador;
 	
-	private ReentrantLock l = new ReentrantLock();
-	private Condition torno1 = l.newCondition();
-	private Condition torno2 = l.newCondition();
-	private Condition torno3 = l.newCondition();
+	private ReentrantLock MonitorTorno = new ReentrantLock(true);
+	private Condition tornos[] = {MonitorTorno.newCondition(), MonitorTorno.newCondition(), MonitorTorno.newCondition()};
 	
 	public Torno() {
-		identificador = 0;
+		
 	}
 
-
-	public int getIdentificador() {
-		return identificador;
-	}
 
 	
 	// Si no está ocupado le dejamos entrar y lo ocupamos
 	public void intentarEntrar(Cliente c) throws InterruptedException{
-		l.lock();
+		MonitorTorno.lock();
 		try {
-			if (!l.hasWaiters(torno1)) {	// Mira si hay sitio en el primero
+			if (!ocupado[0]) {	// Mira si hay sitio en el primero
+				//System.out.println("torno 1");
+				ocupado[0] = true;
 				c.setIndiceTorno(0);
 			} 
-			else if (!l.hasWaiters(torno2)){ // Mira si hay sitio en el segundo
+			else if (!ocupado[1]){ // Mira si hay sitio en el segundo
+				//System.out.println("torno 2");
+				ocupado[1] = true;
 				c.setIndiceTorno(1);
 			}
-			else if (!l.hasWaiters(torno3)) { // Mira si hay sitio en el tercero
+			else if (!ocupado[2]) { // Mira si hay sitio en el tercero
+				//System.out.println("torno 3");
+				ocupado[2] = true;
 				c.setIndiceTorno(2);
 			}
 			else {						    // Si no hay sitio, uno random
-				c.setIndiceTorno(new Random().nextInt() % 3);
+				
+				int t = new Random().nextInt(3);
+				ocupado[t] = true;
+				//System.out.println("torno: " + t);
+				c.setIndiceTorno(t);
 			}
 			
 		} finally {
-			l.unlock();
+			MonitorTorno.unlock();
 		}
 	}
 	
@@ -58,12 +60,12 @@ public class Torno {
 	}
 	
 	public synchronized void salir(Cliente c) {
-		l.lock();
+		MonitorTorno.lock();
 		try{
 			ocupado[c.getIndiceTorno()] = false; // Desocupamos el torno
-			notify(); // Le decimos que pase el siguiente
+			tornos[c.getIndiceTorno()].signal(); // Le decimos que pase el siguiente
 		} finally{
-			l.unlock();
+			MonitorTorno.unlock();
 		}
 	}
 	

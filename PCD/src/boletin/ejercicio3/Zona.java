@@ -1,6 +1,5 @@
 package boletin.ejercicio3;
 
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.locks.*;
 
@@ -8,8 +7,7 @@ public class Zona {
 	
 	
 
-	private int clientesParaSalir = 0;
-	private int maquinas;
+
 	private MonitorBicicleta maquinaBicicleta;
 	private final int[] maquinasPorZona = {5, 5, 5, 5};
 	private final int[] tiempoPorZona = {0, 0, 0, 0};
@@ -21,7 +19,6 @@ public class Zona {
 	
 
 	public Zona() {
-		maquinas = 5;
 		maquinaBicicleta = new MonitorBicicleta(false);
 
 	}	
@@ -39,7 +36,7 @@ public class Zona {
 	}
 	
 	private boolean isBicicletaElected() {
-		return new Random().nextInt() % 5 == 0;
+		return new Random().nextInt(5) % 5 == 0;
 	}
 	/*
 	public int obtenerTiempoRestanteZona(){
@@ -67,7 +64,42 @@ public class Zona {
 	}
 	
 	
-	
+	private void escribirResultadoPorPantalla(Cliente c) {
+		int tiempoAntes = tiempoPorZona[c.getZonaEscogida()] + c.getTiempo();
+		int tiempoDespues = tiempoPorZona[c.getZonaEscogida()];
+		if(c.getUsaBicicleta()) {
+			System.out.println("--------------------------------------------------------------\n" +
+					"Cliente " + c.getIdentificador() + " ha pasado por el torno " +  c.getIndiceTorno() + "\n"
+					+ "Tiempo en el torno: " + c.getTiempo() + "\n"
+					+ "Zona elegida: " + c.getZonaEscogida()+ "\n"
+					+ "Tiempo de entrenamiento: " + c.getTiempo() + "\n"
+					+ "Estimación de espera (sin incluirse a sí mismo): \n"
+					+ "  Zona1(Cardio)= " + tiempoPorZona[0] + ",\n" 
+					+ "  Zona2(fuerza)= " + tiempoPorZona[1] + ",\n" 
+					+ "  Zona3(Funcional)= " + tiempoPorZona[2]+ ",\n"
+					+ "  Zona4(estiramientos)= " + tiempoPorZona[3]+ "\n"
+					+ "Espera en bicicleta premium(si aplica): "+ maquinaBicicleta.getTiempoEsperaBicicleta()+ "\n"
+					+ "--------------------------------------------------------------\n"
+					+"Me he ido de la zona " + c.getZonaEscogida() + " que tiene un tiempo original de  " + tiempoAntes + " y le he quitado mi tiempo " + c.getTiempo() + " y se ha quedado en " + tiempoDespues +"\n"
+					);
+		} else {
+			System.out.println("--------------------------------------------------------------\n" +
+					"Cliente " + c.getIdentificador() + " ha pasado por el torno " +  c.getIndiceTorno() + "\n"
+					+ "Tiempo en el torno: " + c.getTiempo() + "\n"
+					+ "Zona elegida: " + c.getZonaEscogida()+ "\n"
+					+ "Tiempo de entrenamiento: " + c.getTiempo() + "\n"
+					+ "Estimación de espera (sin incluirse a sí mismo): \n"
+					+ "  Zona1(Cardio)= " + tiempoPorZona[0] + ",\n" 
+					+ "  Zona2(fuerza)= " + tiempoPorZona[1] + ",\n" 
+					+ "  Zona3(Funcional)= " + tiempoPorZona[2]+ ",\n"
+					+ "  Zona4(estiramientos)= " + tiempoPorZona[3]+ "\n"
+					+ "Espera en bicicleta premium(si aplica):\n"
+					+ "--------------------------------------------------------------\n"
+					+"Me he ido de la zona " + c.getZonaEscogida() + " que tiene un tiempo original de  " + tiempoAntes + " y le he quitado mi tiempo " + c.getTiempo() + " y se ha quedado en " + tiempoDespues +"\n"
+					);
+		}
+
+	}
 	
 	private int eleccionZona() {
 		// dos casos
@@ -82,7 +114,7 @@ public class Zona {
 		}
 		
 		int zonaEscogida = switch (caso) {
-		case 0 -> new Random().nextInt() % 4; // se elige de forma aleatoria
+		case 0 -> new Random().nextInt(4); // se elige de forma aleatoria
 		case 1 -> obtenerZonaMenorTiempo(); 
 		
 		default -> 
@@ -132,16 +164,16 @@ public class Zona {
 	 public void salir(Cliente c)throws InterruptedException {
 		 monitorZona.lock();
 		 try {
-			 if(monitorZona.hasWaiters(zonas[c.getZonaEscogida()])) { 
+			 
 				 // Aquí iba el cerrojo antes con hasWaiters(colaEspera) !clientesCola.isEmpty()
 				 //colaEspera.signal();
 				 
-				 zonas[c.getZonaEscogida()].signal();
-				 maquinasPorZona[c.getZonaEscogida()]++;
-	
-			 }
+			zonas[c.getZonaEscogida()].signal();
+			maquinasPorZona[c.getZonaEscogida()]++;
+				 
 			 //if(clientesParaSalir > 0) //condicionSalida.signal();
-			 
+			tiempoPorZona[c.getZonaEscogida()] -= c.getTiempo();
+			escribirResultadoPorPantalla(c);
 		 } finally {
 			 monitorZona.unlock();
 		 }
