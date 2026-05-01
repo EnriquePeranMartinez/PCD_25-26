@@ -1,5 +1,7 @@
 package boletin.ejercicio1;
 import java.utils.Random;
+import java.util.Arrays;
+
 
 public class Matriz {
   private int matriz[3][3];
@@ -41,5 +43,11 @@ public class Matriz {
       }
     }
     return c;
+  }
+
+  public void mostrarMatriz(){
+    Arrays.stream(this.matriz)
+      .map(Arrays::toString())
+      .forEach(System.out::println);
   }
 }
