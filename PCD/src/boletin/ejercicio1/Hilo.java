@@ -16,10 +16,10 @@ public class Hilo extends Thread {
         cerrojo.lock();
         switch (caso) {
           case 0:
-            B.sumar(A, A);
+            B = A.sumar(A, A);
             B.mostrarMatriz();
           case 1:
-            B.multiplicar(A, A);
+            B = A.multiplicar(A, A);
             B.mostrarMatriz();
           default: 
             System.err.println("Número de caso desconocido");
