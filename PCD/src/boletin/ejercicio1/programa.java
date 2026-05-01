@@ -5,10 +5,11 @@ package boletin.ejercicio1;
 public class Programa{
 
   //private ReentrantLock pantalla = new ReentrantLock();
-  Matriz a = new Matriz();
-  Matriz b = new Matriz();
-  Matric c = inicializar0();
+
   public static void main(String[] args){
-      
+        Matriz a = new Matriz();
+        Matriz b = inicializar0();
+        a.run(0);
+        b.run(1);
   }
 }
