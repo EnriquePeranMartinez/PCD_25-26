@@ -6,7 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/PCD_25-26/PCD/lib/messagepassing.jar">
+	<classpathentry kind="lib" path="C:/Users/Usuario/git/PCD_25-26/PCD/lib/messagepassing.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
