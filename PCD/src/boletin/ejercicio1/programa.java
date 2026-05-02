@@ -9,7 +9,7 @@ public class Programa{
   public static void main(String[] args){
         Hilo h1 = new hilo();
         Hilo h2 = new hilo();
-        a.run(0);
-        b.run(1);
+        h1.run(0);
+        h2.run(1);
   }
 }
