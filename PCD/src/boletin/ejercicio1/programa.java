@@ -7,8 +7,8 @@ public class Programa{
   //private ReentrantLock pantalla = new ReentrantLock();
 
   public static void main(String[] args){
-        Matriz a = new Matriz();
-        Matriz b = inicializar0();
+        Hilo h1 = new hilo();
+        Hilo h2 = new hilo();
         a.run(0);
         b.run(1);
   }
