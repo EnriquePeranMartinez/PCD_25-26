@@ -1,4 +1,4 @@
-package boletin.ejercicio2:
+package boletin.ejercicio2;
 
 
 public class Programa {
