@@ -1,36 +1,44 @@
 package boletin.ejercicio1;
-import java.utils.Random;
 import java.util.Arrays;
+import java.util.Random;
+
+import boletin.Panel;
 
 
 public class Matriz {
-  private int matriz[3][3];
+  private int matriz[][];
   public static final int TAMANO_MATRIZ_EJERCICIO_1 = 3;
+  public final static int TAMANO_MATRIZ_EJERCICIO_2 = 5;
+
 
   public int[][] getMatriz(){
-    return this.matriz
+    return this.matriz;
   }
 
   public Matriz(){
+	  matriz = new int[TAMANO_MATRIZ_EJERCICIO_1][TAMANO_MATRIZ_EJERCICIO_1];
     for(int i = 0; i < TAMANO_MATRIZ_EJERCICIO_1; i++){
       for(int j = 0; j < TAMANO_MATRIZ_EJERCICIO_1; j++){
-        this.matriz[i][j] = new Random().nextInteger();
+        this.matriz[i][j] = new Random().nextInt();
       }
     }
   }
 
-    public Matriz(int size){
-    for(int i = 0; i < size; i++){
-      for(int j = 0; j < size; j++){
-        this.matriz[i][j] = new Random().nextInteger(11);
-      }
-    }
+    public Matriz(int filas, int columnas, boolean caso){
+    	this.matriz = new int[filas][columnas];
+    	if(caso) {
+    	    for(int i = 0; i < filas; i++){
+    		      for(int j = 0; j < columnas; j++){
+    		        this.matriz[i][j] = new Random().nextInt(10);
+    		      }
+    		}
+    	}
   }
 
-  public void inicializar0(Matriz a){
+  public void inicializar0(){
       for(int i = 0; i < 3; i++){
         for(int j = 0; j < 3; j++){
-          c.getMatriz()[i][j] = 0;
+         this.matriz[i][j] = 0;
       }
     }
   }
@@ -46,7 +54,7 @@ public class Matriz {
   }
 
   public Matriz multiplicar(Matriz a, Matriz b){
-    Matriz c = inicializar(0);
+    Matriz c = new Matriz(); c.inicializar0();
 
     for(int i = 0; i < 3; i++){
       for(int j = 0; j < 3; j++){
@@ -58,41 +66,51 @@ public class Matriz {
 
   public void mostrarMatriz(){
     Arrays.stream(this.matriz)
-      .map(Arrays::toString())
+      .map(Arrays::toString)
       .forEach(System.out::println);
   }
   // FUNCIONES EJERCICIO 2
-  private int[] calcularMejorMarca(Matriz A){
+  private static int[] calcularMejorMarca(Matriz A){
     int[] marcas = {0, 0, 0, 0, 0};
-    int mejorMarca = -1;
     
     for(int i = 0; i < TAMANO_MATRIZ_EJERCICIO_2; i++){
-      for(int j = 0; j < TAMANO_MATRIZ_EJERCICIO_2; j++){
-        if(A.getMatriz()[i][j] > mejorMarca) mejorMarca = A.getMatriz()[i][j];
-      }
-      marcas[i] = mejorMarca;
-    }
+    	int mejorMarca = -1;
+	    for(int j = 0; j < TAMANO_MATRIZ_EJERCICIO_2; j++){
+	        if(A.getMatriz()[i][j] > mejorMarca) mejorMarca = A.getMatriz()[i][j];
+	      }
+	      marcas[i] = mejorMarca;
+	    }
     return marcas;
   }
 
   public void mostrarMatriz(Matriz R, Panel P, int equipo){
-    system.out.println("Usando el panel " + P " el hilo " + equipo);
-    system.out.println("Matriz R (resumen del equipo " + equipo + ": mejores marcas) = " + R);
-    system.out.println("Terminando de usar panel" + P + " el hilo (equipo)" + id );
+    System.out.println("Usando el panel " + P + " el hilo " + equipo);
+    System.out.println("Matriz R (resumen del equipo " + equipo + ": mejores marcas) = " + R);
+    System.out.println("Terminando de usar panel" + P + " el hilo (equipo)" + equipo );
   }
 
-  public Matriz calcularMatrizResumen(Matriz... matrices){
-    // mirar de hacerlo con streams :)
-    Matriz R;
+  public static Matriz calcularMatrizResumen(Matriz... matrices){
+    Matriz R = new Matriz(matrices.length, TAMANO_MATRIZ_EJERCICIO_2, false);
     int i = 0;
-    int[] arr;
-    for(m : matrices){
-      arr = calcularMejorMarca(m);
+    
+    for(Matriz m : matrices){
+    	int[] arr = calcularMejorMarca(m);;
+     
       for(int j = 0; j < TAMANO_MATRIZ_EJERCICIO_2; j++){
         R.getMatriz()[i][j] = arr[j];
       }
       i++;
     }
     return R;
+  }
+  
+  @Override
+  public String toString() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("\n");
+      for (int[] fila : this.matriz) {
+          sb.append(Arrays.toString(fila)).append("\n");
+      }
+      return sb.toString();
   }
 }
