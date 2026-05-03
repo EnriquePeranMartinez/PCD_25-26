@@ -3,7 +3,6 @@ import java.util.Arrays;
 import java.util.Random;
 
 import boletin.Panel;
-import boletin.ejercicio2.*;
 
 
 public class Matriz {
@@ -25,12 +24,15 @@ public class Matriz {
     }
   }
 
-    public Matriz(int size){
-    for(int i = 0; i < size; i++){
-      for(int j = 0; j < size; j++){
-        this.matriz[i][j] = new Random().nextInt(11);
-      }
-    }
+    public Matriz(int filas, int columnas, boolean caso){
+    	this.matriz = new int[filas][columnas];
+    	if(caso) {
+    	    for(int i = 0; i < filas; i++){
+    		      for(int j = 0; j < columnas; j++){
+    		        this.matriz[i][j] = new Random().nextInt(10);
+    		      }
+    		}
+    	}
   }
 
   public void inicializar0(){
@@ -70,14 +72,14 @@ public class Matriz {
   // FUNCIONES EJERCICIO 2
   private static int[] calcularMejorMarca(Matriz A){
     int[] marcas = {0, 0, 0, 0, 0};
-    int mejorMarca = -1;
     
     for(int i = 0; i < TAMANO_MATRIZ_EJERCICIO_2; i++){
-      for(int j = 0; j < TAMANO_MATRIZ_EJERCICIO_2; j++){
-        if(A.getMatriz()[i][j] > mejorMarca) mejorMarca = A.getMatriz()[i][j];
-      }
-      marcas[i] = mejorMarca;
-    }
+    	int mejorMarca = -1;
+	    for(int j = 0; j < TAMANO_MATRIZ_EJERCICIO_2; j++){
+	        if(A.getMatriz()[i][j] > mejorMarca) mejorMarca = A.getMatriz()[i][j];
+	      }
+	      marcas[i] = mejorMarca;
+	    }
     return marcas;
   }
 
@@ -88,17 +90,27 @@ public class Matriz {
   }
 
   public static Matriz calcularMatrizResumen(Matriz... matrices){
-    // mirar de hacerlo con streams :)
-    Matriz R = new Matriz();
+    Matriz R = new Matriz(matrices.length, TAMANO_MATRIZ_EJERCICIO_2, false);
     int i = 0;
-    int[] arr;
+    
     for(Matriz m : matrices){
-      arr = calcularMejorMarca(m);
+    	int[] arr = calcularMejorMarca(m);;
+     
       for(int j = 0; j < TAMANO_MATRIZ_EJERCICIO_2; j++){
         R.getMatriz()[i][j] = arr[j];
       }
       i++;
     }
     return R;
+  }
+  
+  @Override
+  public String toString() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("\n");
+      for (int[] fila : this.matriz) {
+          sb.append(Arrays.toString(fila)).append("\n");
+      }
+      return sb.toString();
   }
 }
