@@ -16,7 +16,7 @@ public class ControlAccesos extends Thread {
 	private static Aficionado[] aficionados;	// Array con los aficionados
 	
 	
-	private static void inicializarAficionados() {
+	public static void inicializarAficionados() {
 		aficionados = new Aficionado[NUMERO_AFICIONADOS];
 		for (int i = 0; i < NUMERO_AFICIONADOS; i++) {
 			aficionados[i] = new Aficionado("a"+i);

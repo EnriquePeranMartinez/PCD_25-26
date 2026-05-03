@@ -4,8 +4,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class programa {
 
-  //private ReentrantLock pantalla = new ReentrantLock();
-
   public static void main(String[] args){
 	  	ReentrantLock c = new ReentrantLock();
         Hilo h1 = new Hilo(c);
